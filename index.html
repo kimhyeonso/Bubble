@@ -22,12 +22,12 @@
         }
 
         .ranbow{
-            opacity: .5;
+            opacity: .3;
             z-index: -10;
         }
 
         .butterfly{
-            opacity: .3;
+            opacity: .2;
             z-index: -5;
         }
 
@@ -36,8 +36,10 @@
 </head>
 <body>
     <canvas></canvas>
-    <img class="ranbow" src="./bg.jpg" alt="rainbow">
-    <img class="butterfly" src="./bg02.png" alt="butterfly">
+    <div class="bg">
+        <img class="ranbow" src="./bg.jpg" alt="rainbow">
+        <img class="butterfly" src="./bg02.png" alt="butterfly">
+    </div>
 
     <script>
     const canvas = document.querySelector("canvas");
@@ -60,7 +62,7 @@
             speedX : -3 + Math.random() * 1,
             speedY : -3 + Math.random() * 1,
 
-            color : `hsla(${Math.random()*360},70%,90%,0.6)`
+            color : `hsla(${Math.random()*360},70%,90%,0.8)`
         });
 
     }
