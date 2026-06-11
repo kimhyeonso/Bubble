@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>비눗방울</title>
     <link rel="stylesheet" href="./css/reset.css">
     <style>
         body{
@@ -19,14 +19,25 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: -10;
-            opacity: .7;
         }
+
+        .ranbow{
+            opacity: .5;
+            z-index: -10;
+        }
+
+        .butterfly{
+            opacity: .3;
+            z-index: -5;
+        }
+
+
     </style>
 </head>
 <body>
     <canvas></canvas>
-    <img src="./bg.jpg" alt="rainbow">
+    <img class="ranbow" src="./bg.jpg" alt="rainbow">
+    <img class="butterfly" src="./bg02.png" alt="butterfly">
 
     <script>
     const canvas = document.querySelector("canvas");
@@ -44,12 +55,12 @@
             x : Math.random() * canvas.width,
             y : Math.random() * canvas.height,
 
-            r : 100 + Math.random() * 100,
+            r : 130 + Math.random() * 100,
 
             speedX : -3 + Math.random() * 1,
             speedY : -3 + Math.random() * 1,
 
-            color : `hsl(0,100%,85%,.3)`
+            color : `hsla(${Math.random()*360},70%,90%,0.6)`
         });
 
     }
@@ -95,6 +106,54 @@
             gradient.addColorStop(1, circle.color)
             ctx.fillStyle = gradient;
             ctx.fill();
+
+            const rainbow = ctx.createLinearGradient(
+                circle.x - circle.r,
+                circle.y - circle.r,
+                circle.x + circle.r,
+                circle.y + circle.r
+            );
+
+            rainbow.addColorStop(0, "rgba(255,150,200,0.15)");
+            rainbow.addColorStop(0.25, "rgba(255,255,180,0.12)");
+            rainbow.addColorStop(0.5, "rgba(180,255,255,0.12)");
+            rainbow.addColorStop(0.75, "rgba(180,200,255,0.12)");
+            rainbow.addColorStop(1, "rgba(220,180,255,0.15)");
+
+            ctx.save();
+
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+            ctx.clip();
+
+            ctx.fillStyle = rainbow;
+            ctx.fillRect(
+                circle.x - circle.r,
+                circle.y - circle.r,
+                circle.r * 2,
+                circle.r * 2
+            );
+
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+
+            const border = ctx.createLinearGradient(
+                circle.x - circle.r,
+                circle.y - circle.r,
+                circle.x + circle.r,
+                circle.y + circle.r
+            );
+
+            border.addColorStop(0, "rgba(255,180,200,0.25)");
+            border.addColorStop(0.3, "rgba(255,255,200,0.25)");
+            border.addColorStop(0.6, "rgba(180,255,255,0.25)");
+            border.addColorStop(1, "rgba(200,180,255,0.25)");
+
+            ctx.strokeStyle = border;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
 
             ctx.beginPath();
                 ctx.arc(
