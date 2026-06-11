@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <style>
+        body{
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -10;
+            opacity: .7;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <img src="./bg.jpg" alt="rainbow">
+
+    <script>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let circles = [];
+
+    for(let i = 0; i < 10; i++){
+
+        circles.push({
+
+            x : Math.random() * canvas.width,
+            y : Math.random() * canvas.height,
+
+            r : 100 + Math.random() * 100,
+
+            speedX : -3 + Math.random() * 1,
+            speedY : -3 + Math.random() * 1,
+
+            color : `hsl(0,100%,85%,.3)`
+        });
+
+    }
+
+    function ani(){
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        for(let i = 0; i < circles.length; i++){
+
+            let circle = circles[i];
+
+            circle.x += circle.speedX;
+            circle.y += circle.speedY;
+
+            // 좌우 벽
+            if(
+                circle.x + circle.r > canvas.width ||circle.x - circle.r < 0){
+                circle.speedX *= -1;
+            }
+
+            // 상하 벽
+            if(
+                circle.y + circle.r > canvas.height || circle.y - circle.r < 0){
+                circle.speedY *= -1;
+            }
+
+            ctx.beginPath();
+            ctx.arc(circle.x,circle.y,circle.r,0,Math.PI * 2);
+
+            const gradient = ctx.createRadialGradient(
+                circle.x - circle.r * 0.3,
+                circle.y - circle.r * 0.3,
+                circle.r * 0.1,
+                circle.x,
+                circle.y,
+                circle.r
+            )
+
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.6)")
+            gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.4)")
+            gradient.addColorStop(0.6, "rgba(255, 255, 255, 0.2)")
+            gradient.addColorStop(1, circle.color)
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.beginPath();
+                ctx.arc(
+                    circle.x - circle.r * 0.3,
+                    circle.y - circle.r * 0.3,
+                    circle.r * 0.15,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fillStyle = "rgba(255,255,255,0.3)";
+                ctx.fill();
+        }
+
+        requestAnimationFrame(ani);
+    }
+
+    ani();
+        
+    </script>
+</body>
+</html>
